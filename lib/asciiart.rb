@@ -30,14 +30,10 @@ class AsciiArt
     quantum_calc  = Magick::QuantumRange / Magick::QuantumPixel.to_i
     image_chars.map! {|char| char == " " ? "&nbsp;" : char } if options[:format] == "html"
 
-    border = "+#{'-' * width}+#{line_break(options[:format])}"
-    border = html_char(border) if options[:format] == "html"
-
-    output = border.dup
+    output = ""
 
     img.view(0, 0, width, height) do |view|
       height.times do |i|
-        output << '|'
         width.times do |j|
 
           character = image_chars[view[i][j].red/quantum_calc]
@@ -62,11 +58,11 @@ class AsciiArt
           output << character
         end
 
-        output << "|#{line_break(options[:format])}"
+        output << "#{line_break(options[:format])}"
       end
     end
 
-    output + border
+    output
   end
 
   def image_chars
